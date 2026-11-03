@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Юбилей Татьяны</title>
+  <style>
+    /* Подключение шрифта Felidae */
+    @font-face {
+      font-family: 'Felidae';
+      src: url('Felidae.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    
+    html { height: 100%; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f4f0e7;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    .site-wrapper {
+      width: 100%;
+      max-width: 440px;
+      margin: 0 auto;
+      background: #000;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 100svh;
+      min-height: 500px;
+      overflow: hidden;
+    }
+    .hero__img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+    @supports not (height: 100svh) { .hero { height: 100vh; } }
+
+    .photo-section { width: 100%; line-height: 0; }
+    .photo-section__img { width: 100%; height: auto; display: block; }
+
+    .map-section {
+      position: relative;
+      width: 100%;
+      line-height: 0;
+    }
+    .map-section__bg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .map-section__iframe-wrap {
+      position: absolute;
+      top: 48%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 85%;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      z-index: 2;
+    }
+    .map-section__iframe {
+      display: block;
+      width: 100%;
+      height: 220px;
+      border: none;
+    }
+
+    /* =========================================
+       СЕКЦИЯ С АНКЕТОЙ
+       ========================================= */
+    .rsvp-section {
+      position: relative;
+      width: 100%;
+      min-height: 100svh;
+      display: flex;
+      align-items: flex-start; 
+      justify-content: center;
+      padding-top: 260px; 
+      padding-bottom: 60px; 
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+    
+    .rsvp-section__bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
+
+    .rsvp-form {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 400px;
+      color: #7a1e20;
+      font-family: 'Felidae', serif;
+    }
+
+    .rsvp-form__group { margin-bottom: 22px; }
+    .rsvp-form__label { display: block; font-size: 18px; color: #7a1e20; margin-bottom: 8px; }
+    .rsvp-form__input {
+      width: 100%; padding: 12px 0; font-size: 18px; font-family: 'Felidae', serif; color: #7a1e20;
+      background: transparent; border: none; border-bottom: 1px solid #7a1e20; border-radius: 0;
+      outline: none; transition: border-color 0.2s; -webkit-appearance: none; appearance: none;
+    }
+    .rsvp-form__input::placeholder { color: rgba(122, 30, 32, 0.5); }
+    .rsvp-form__input:focus { border-bottom: 2px solid #7a1e20; }
+
+    .rsvp-radio-group { display: flex; gap: 15px; }
+    .rsvp-radio { flex: 1; position: relative; }
+    .rsvp-radio input { position: absolute; opacity: 0; cursor: pointer; }
+    .rsvp-radio__label {
+      display: block; padding: 10px 0; text-align: center; background: transparent;
+      border-bottom: 1px solid rgba(122, 30, 32, 0.4); font-size: 18px; font-family: 'Felidae', serif;
+      color: #7a1e20; cursor: pointer; transition: all 0.2s;
+    }
+    .rsvp-radio input:checked + .rsvp-radio__label { border-bottom: 2px solid #7a1e20; font-weight: bold; }
+
+    .rsvp-alcohol-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .rsvp-checkbox { position: relative; display: flex; align-items: center; }
+    .rsvp-checkbox input { position: absolute; opacity: 0; }
+    .rsvp-checkbox__label {
+      display: flex; align-items: center; width: 100%; padding: 8px 0; background: transparent;
+      font-size: 18px; font-family: 'Felidae', serif; color: #7a1e20; cursor: pointer; transition: all 0.2s;
+    }
+    .rsvp-checkbox__label::before {
+      content: ''; display: inline-block; width: 18px; height: 18px; border: 1px solid #7a1e20;
+      border-radius: 4px; margin-right: 10px; background: transparent; flex-shrink: 0; transition: all 0.2s;
+    }
+    .rsvp-checkbox input:checked + .rsvp-checkbox__label::before {
+      background: #7a1e20;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f4f0e7' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='20 6 9 17 4 12'%3e%3c/polyline%3e%3c/svg%3e");
+      background-size: 12px; background-position: center; background-repeat: no-repeat;
+    }
+
+    .rsvp-form__submit {
+      width: 100%; padding: 14px; margin-top: 10px; background: #7a1e20; color: #f4f0e7;
+      border: none; border-radius: 8px; font-size: 20px; font-family: 'Felidae', serif;
+      cursor: pointer; transition: opacity 0.2s, transform 0.2s;
+    }
+    .rsvp-form__submit:active { opacity: 0.8; transform: scale(0.98); }
+
+    .rsvp-success {
+      display: none; text-align: center; padding: 20px; color: #7a1e20; font-family: 'Felidae', serif;
+      font-size: 22px; line-height: 1.5; z-index: 1; position: relative;
+    }
+    .rsvp-success.visible { display: block; }
+
+    /* =========================================
+       СЕКЦИЯ 10: КНОПКА В ЧАТ (99.png)
+       ========================================= */
+    .chat-section {
+      position: relative;
+      width: 100%;
+      line-height: 0;
+    }
+    .chat-section__bg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .chat-section__btn {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background-color: #7a1e20;
+      color: #f4f0e7; 
+      
+      text-decoration: none;
+      font-family: 'Felidae', serif;
+      font-size: 18px;
+      text-align: center;
+      line-height: 1.2;
+      
+      box-shadow: 0 8px 20px rgba(122, 30, 32, 0.3);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      z-index: 2;
+    }
+    .chat-section__btn:active {
+      transform: translate(-50%, -50%) scale(0.95);
+      box-shadow: 0 4px 10px rgba(122, 30, 32, 0.4);
+    }
+
+    /* Фикс для ПК */
+    @media (min-width: 441px) {
+      .site-wrapper {
+        zoom: 0.85;
+        -moz-transform: scale(0.85);
+        -moz-transform-origin: top center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="site-wrapper">
+
+    <!-- Секция 1 -->
+    <section class="hero">
+      <img class="hero__img" src="1.png" alt="Свадебное фото" fetchpriority="high" decoding="async">
+    </section>
+
+    <!-- НОВАЯ СЕКЦИЯ 1.1 -->
+    <section class="photo-section">
+      <img class="photo-section__img" src="1.1.png" alt="" loading="lazy" decoding="async">
+    </section>
+
+    <!-- Секция 2 -->
+    <section class="photo-section">
+      <img class="photo-section__img" src="2.png" alt="" loading="lazy" decoding="async">
+    </section>
+
+    <!-- Секция 3 -->
+    <section class="photo-section">
+      <img class="photo-section__img" src="3.png" alt="" loading="lazy" decoding="async">
+    </section>
+
+    <!-- Секция 4: Карта -->
+    <section class="map-section">
+      <img class="map-section__bg" src="4.png" alt="" loading="lazy" decoding="async">
+      
+      <div class="map-section__iframe-wrap">
+        <iframe 
+          class="map-section__iframe"
+          src="https://yandex.ru/map-widget/v1/?um=constructor%3A131459f4fcb4ef74d4255b78eb324317e3b9c3b94828f973c3c55bccdc6df753&amp;source=constructor" 
+          frameborder="0"
+          loading="lazy"
+          allowfullscreen
+          title="Карта места проведения">
+        </iframe>
+      </div>
+    </section>
+
+    <!-- Секция 5 -->
+    <section class="photo-section">
+      <img class="photo-section__img" src="5.png" alt="" loading="lazy" decoding="async">
+    </section>
+
+    <!-- Секция 6 -->
+    <section class="photo-section">
+      <img class="photo-section__img" src="6.png" alt="" loading="lazy" decoding="async">
+    </section>
+
+    <!-- Секция 8 -->
+    <section class="photo-section">
+      <img class="photo-section__img" src="8.png" alt="" loading="lazy" decoding="async">
+    </section>
+
+    <!-- Секция 9: Анкета -->
+    <section class="rsvp-section">
+      <img class="rsvp-section__bg" src="7.png" alt="" loading="lazy" decoding="async">
+      
+      <form class="rsvp-form" id="rsvpForm">
+        <div class="rsvp-form__group">
+          <label class="rsvp-form__label" for="guestName">Имя и Фамилия</label>
+          <input class="rsvp-form__input" type="text" id="guestName" placeholder="Иван Иванов" required>
+        </div>
+
+        <div class="rsvp-form__group">
+          <label class="rsvp-form__label">Сможете ли вы присутствовать?</label>
+          <div class="rsvp-radio-group">
+            <label class="rsvp-radio">
+              <input type="radio" name="attend" value="yes" checked>
+              <span class="rsvp-radio__label">Приду</span>
+            </label>
+            <label class="rsvp-radio">
+              <input type="radio" name="attend" value="no">
+              <span class="rsvp-radio__label">Не приду</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="rsvp-form__group">
+          <label class="rsvp-form__label">Предпочтения по напиткам</label>
+          <div class="rsvp-alcohol-grid">
+            <label class="rsvp-checkbox">
+              <input type="checkbox" name="alcohol" value="sparkling">
+              <span class="rsvp-checkbox__label">Игристое</span>
+            </label>
+            <label class="rsvp-checkbox">
+              <input type="checkbox" name="alcohol" value="white_wine">
+              <span class="rsvp-checkbox__label">Вино белое</span>
+            </label>
+            <label class="rsvp-checkbox">
+              <input type="checkbox" name="alcohol" value="red_wine">
+              <span class="rsvp-checkbox__label">Вино красное</span>
+            </label>
+            <label class="rsvp-checkbox">
+              <input type="checkbox" name="alcohol" value="strong">
+              <span class="rsvp-checkbox__label">Крепкий алкоголь</span>
+            </label>
+          </div>
+        </div>
+
+        <button type="submit" class="rsvp-form__submit">Отправить</button>
+      </form>
+
+      <div class="rsvp-success" id="rsvpSuccess">
+        Спасибо!<br>Ваш ответ сохранён.
+      </div>
+    </section>
+
+    <!-- =========================================
+         СЕКЦИЯ 10: КНОПКА В ЧАТ (99.png)
+         ========================================= -->
+    <section class="chat-section">
+      <img class="chat-section__bg" src="9.png" alt="" loading="lazy" decoding="async">
+      
+      <a href="https://chat.whatsapp.com/BWEscYIF66ZFo7hz01YEB9?mode=gi_t" target="_blank" rel="noopener" class="chat-section__btn">
+        Перейти<br>в чат
+      </a>
+    </section>
+
+  </div>
+
+  <script>
+    // Скрипт для анкеты
+    (function () {
+      const form = document.getElementById('rsvpForm');
+      const successMsg = document.getElementById('rsvpSuccess');
+
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        form.style.display = 'none';
+        successMsg.classList.add('visible');
+      });
+    })();
+  </script>
+
+</body>
+</html>
